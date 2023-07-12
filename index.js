@@ -13,8 +13,12 @@ app.listen(port, () =>
 const db = new sqlite3.Database("bread.db");
 
 app.get("/", (req, res) => {
+  console.log("URL Query String:", req.url);
+
+  const url = req.url === "/" ? "/?page=1" : req.url;
   const page = parseInt(req.query.page || 1);
-  const limit = 7;
+
+  const limit = 5;
   const offset = (page - 1) * limit;
   const searchConditions = [];
   const queryParams = [];
@@ -53,14 +57,12 @@ app.get("/", (req, res) => {
   }
 
   query += ` LIMIT $1 OFFSET $2`;
-
   db.get(queryCount, queryParams, (err, result) => {
     if (err) {
       console.error(err);
     } else {
       const count = result.count;
       const pages = Math.ceil(count / limit);
-
       db.all(query, [...queryParams, limit, offset], (err, rows) => {
         if (err) {
           console.error(err);
@@ -70,6 +72,8 @@ app.get("/", (req, res) => {
             pages: pages,
             currentPage: page,
             query: req.query,
+            url,
+            page,
           });
         }
       });

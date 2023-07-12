@@ -13,6 +13,7 @@
 
       <br />
       <form method="get" action="">
+        <input type="hidden" name="page" value="1">
         <div class="mb-3 row">
           <label for="search_string" class="col-sm-2 col-form-label"
             >String</label
@@ -193,7 +194,7 @@
           </li>
           <% for (let i = 1; i <= pages; i++) { %>
           <li class="page-item <% if (currentPage === i) { %>active<% } %>">
-            <a class="page-link" href="/?page=<%= i %>"><%= i %></a>
+            <a class="page-link" href="<%= url.replace(`page=${page}`,`page=${i}`) %>"><%= i %></a>
           </li>
           <% } %>
           <li
