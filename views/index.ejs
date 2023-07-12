@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>BREAD App</title>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+    />
+  </head>
+  <body>
+    <div class="container">
+      <h1 class="text-center mt-4">BREAD (Browse, Read, Edit, Add, Delete)</h1>
+
+      <br />
+      <form method="get" action="">
+        <div class="mb-3 row">
+          <label for="search_string" class="col-sm-2 col-form-label"
+            >String</label
+          >
+          <div class="col-sm-10">
+            <div class="form-check">
+              <input
+                class="form-check-input"
+                type="checkbox"
+                id="string"
+                name="string"
+                <% if (query.string === 'on') { %>
+                  checked
+                <% } %>
+              />
+              <input
+                type="text"
+                class="form-control"
+                id="search_string"
+                name="search_string"
+                value="<%= query.search_string %>"
+              />
+            </div>
+          </div>
+        </div>
+        <div class="mb-3 row">
+          <label for="search_integer" class="col-sm-2 col-form-label"
+            >Integer</label
+          >
+          <div class="col-sm-10">
+            <div class="form-check">
+              <input
+                class="form-check-input"
+                type="checkbox"
+                id="integer"
+                name="integer"
+                <% if (query.integer === 'on') { %>
+                  checked
+                <% } %>
+              />
+              <input
+                type="text"
+                class="form-control"
+                id="search_integer"
+                name="search_integer"
+                value="<%= query.search_integer %>"
+              />
+            </div>
+          </div>
+        </div>
+        <div class="mb-3 row">
+          <label for="search_float" class="col-sm-2 col-form-label"
+            >Float</label
+          >
+          <div class="col-sm-10">
+            <div class="form-check">
+              <input
+                class="form-check-input"
+                type="checkbox"
+                id="float"
+                name="float"
+                <% if (query.float === 'on') { %>
+                  checked
+                <% } %>
+              />
+              <input
+                type="text"
+                class="form-control"
+                id="search_float"
+                name="search_float"
+                value="<%= query.search_float %>"
+              />
+            </div>
+          </div>
+        </div>
+        <div class="mb-3 row">
+          <label for="search_date" class="col-sm-2 col-form-label">Date</label>
+          <div class="col-sm-10">
+            <div class="form-check">
+              <input
+                class="form-check-input"
+                type="checkbox"
+                id="date"
+                name="date"
+                <% if (query.date === 'on') { %>
+                  checked
+                <% } %>
+              />
+              <input
+                type="date"
+                class="form-control"
+                id="search_date"
+                name="search_date"
+                value="<%= query.search_date %>"
+              />
+            </div>
+          </div>
+        </div>
+        <div class="mb-3 row">
+          <label for="search_boolean" class="col-sm-2 col-form-label"
+            >Boolean</label
+          >
+          <div class="col-sm-10">
+            <div class="form-check">
+              <input
+                class="form-check-input"
+                type="checkbox"
+                id="boolean"
+                name="boolean"
+                <% if (query.boolean === 'on') { %>
+                  checked
+                <% } %>
+              />
+              <select
+               class="form-select"
+               id="search_boolean"
+               name="search_boolean"
+              >
+                <option value="True" <%= query.search_boolean === 'True' ? 'selected' : '' %>>True</option>
+                <option value="False" <%= query.search_boolean === 'False' ? 'selected' : '' %>>False</option>
+             </select>
+            </div>
+          </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-sm">Search</button>
+        <a href="/" class="btn btn-warning btn-sm">Reset</a>
+      </form>
+
+      <br />
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th scope="col">ID</th>
+            <th scope="col">String</th>
+            <th scope="col">Integer</th>
+            <th scope="col">Float</th>
+            <th scope="col">Date</th>
+            <th scope="col">Boolean</th>
+            <th scope="col">Aksi</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% breads.forEach((bread) => { %>
+          <tr>
+            <th scope="row"><%= bread.id %></th>
+            <td><%= bread.string %></td>
+            <td><%= bread.integer %></td>
+            <td><%= bread.float %></td>
+            <td><%= bread.date %></td>
+            <td><%= bread.boolean %></td>
+            <td>
+              <a
+                href="/edit/<%= bread.id %>"
+                class="btn btn-outline-primary btn-sm"
+                >Edit</a
+              >
+              <a
+                href="/delete/<%= bread.id %>"
+                class="btn btn-outline-danger btn-sm"
+                >Hapus</a
+              >
+            </td>
+          </tr>
+          <% }); %>
+        </tbody>
+      </table>
+      <nav aria-label="Page navigation example">
+        <ul class="pagination">
+          <li class="page-item <% if (currentPage === 1) { %>disabled<% } %>">
+            <a
+              class="page-link"
+              href="/?page=<%= currentPage - 1 %>"
+              aria-label="Previous"
+            >
+              <span aria-hidden="true">&laquo;</span>
+            </a>
+          </li>
+          <% for (let i = 1; i <= pages; i++) { %>
+          <li class="page-item <% if (currentPage === i) { %>active<% } %>">
+            <a class="page-link" href="/?page=<%= i %>"><%= i %></a>
+          </li>
+          <% } %>
+          <li
+            class="page-item <% if (currentPage === pages) { %>disabled<% } %>"
+          >
+            <a
+              class="page-link"
+              href="/?page=<%= currentPage + 1 %>"
+              aria-label="Next"
+            >
+              <span aria-hidden="true">&raquo;</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+      <a href="/add" class="btn btn-primary btn-sm">Tambah</a>
+    </div>
+    <br />
+  </body>
+</html>
